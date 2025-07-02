@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Scanner - Menu to Visual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .scanner-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+
+        .camera-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #videoElement {
+            width: 100%;
+            border-radius: 15px;
+            display: none;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .dish-result {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dish-result:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .dish-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .dish-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .camera-controls {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .camera-controls button {
+            margin: 0 10px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .scanner-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ Food Scanner</h1>
+            <p>Scan menu items to see how they look!</p>
+        </div>
+
+        <div class="scanner-card">
+            <div class="camera-container">
+                <video id="videoElement" autoplay playsinline></video>
+                <canvas id="canvas"></canvas>
+                
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📸</div>
+                    <h3>Take Photo or Upload Image</h3>
+                    <p>Scan a menu to identify food items</p>
+                </div>
+                
+                <div class="camera-controls" id="cameraControls">
+                    <button class="btn" id="captureBtn">📷 Capture</button>
+                    <button class="btn" id="stopCameraBtn">❌ Stop Camera</button>
+                </div>
+            </div>
+
+            <input type="file" id="fileInput" accept="image/*" capture="environment">
+            
+            <button class="btn" id="cameraBtn">📱 Use Camera</button>
+            <button class="btn" id="uploadBtn">📁 Upload Image</button>
+            <button class="btn" id="processBtn" disabled>🔍 Scan Menu</button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing menu items...</p>
+            </div>
+
+            <div class="results" id="results"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
+    <script>
+        class FoodScannerApp {
+            constructor() {
+                this.currentImage = null;
+                this.stream = null;
+                this.initializeElements();
+                this.setupEventListeners();
+            }
+
+            initializeElements() {
+                this.uploadArea = document.getElementById('uploadArea');
+                this.fileInput = document.getElementById('fileInput');
+                this.videoElement = document.getElementById('videoElement');
+                this.canvas = document.getElementById('canvas');
+                this.cameraBtn = document.getElementById('cameraBtn');
+                this.uploadBtn = document.getElementById('uploadBtn');
+                this.captureBtn = document.getElementById('captureBtn');
+                this.stopCameraBtn = document.getElementById('stopCameraBtn');
+                this.processBtn = document.getElementById('processBtn');
+                this.loading = document.getElementById('loading');
+                this.results = document.getElementById('results');
+                this.cameraControls = document.getElementById('cameraControls');
+            }
+
+            setupEventListeners() {
+                // Upload area events
+                this.uploadArea.addEventListener('click', () => this.fileInput.click());
+                this.uploadArea.addEventListener('dragover', this.handleDragOver.bind(this));
+                this.uploadArea.addEventListener('drop', this.handleDrop.bind(this));
+                this.uploadArea.addEventListener('dragleave', this.handleDragLeave.bind(this));
+
+                // Button events
+                this.fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+                this.cameraBtn.addEventListener('click', this.startCamera.bind(this));
+                this.uploadBtn.addEventListener('click', () => this.fileInput.click());
+                this.captureBtn.addEventListener('click', this.captureImage.bind(this));
+                this.stopCameraBtn.addEventListener('click', this.stopCamera.bind(this));
+                this.processBtn.addEventListener('click', this.processImage.bind(this));
+            }
+
+            handleDragOver(e) {
+                e.preventDefault();
+                this.uploadArea.classList.add('dragover');
+            }
+
+            handleDragLeave(e) {
+                e.preventDefault();
+                this.uploadArea.classList.remove('dragover');
+            }
+
+            handleDrop(e) {
+                e.preventDefault();
+                this.uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    this.handleFile(files[0]);
+                }
+            }
+
+            handleFileSelect(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    this.handleFile(file);
+                }
+            }
+
+            handleFile(file) {
+                if (!file.type.startsWith('image/')) {
+                    this.showError('Please select an image file.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.currentImage = e.target.result;
+                    this.processBtn.disabled = false;
+                    this.uploadArea.innerHTML = `
+                        <img src="${this.currentImage}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+                        <p style="margin-top: 10px; color: #667eea;">Image loaded! Ready to scan.</p>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            async startCamera() {
+                try {
+                    this.stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            facingMode: 'environment',
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        } 
+                    });
+                    
+                    this.videoElement.srcObject = this.stream;
+                    this.videoElement.style.display = 'block';
+                    this.uploadArea.style.display = 'none';
+                    this.cameraControls.style.display = 'block';
+                    this.cameraBtn.style.display = 'none';
+                    this.uploadBtn.style.display = 'none';
+                } catch (error) {
+                    this.showError('Unable to access camera. Please try uploading an image instead.');
+                    console.error('Camera error:', error);
+                }
+            }
+
+            captureImage() {
+                const context = this.canvas.getContext('2d');
+                this.canvas.width = this.videoElement.videoWidth;
+                this.canvas.height = this.videoElement.videoHeight;
+                
+                context.drawImage(this.videoElement, 0, 0);
+                this.currentImage = this.canvas.toDataURL('image/jpeg');
+                
+                this.stopCamera();
+                this.processBtn.disabled = false;
+                
+                this.uploadArea.innerHTML = `
+                    <img src="${this.currentImage}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+                    <p style="margin-top: 10px; color: #667eea;">Photo captured! Ready to scan.</p>
+                `;
+                this.uploadArea.style.display = 'block';
+            }
+
+            stopCamera() {
+                if (this.stream) {
+                    this.stream.getTracks().forEach(track => track.stop());
+                    this.stream = null;
+                }
+                this.videoElement.style.display = 'none';
+                this.cameraControls.style.display = 'none';
+                this.cameraBtn.style.display = 'block';
+                this.uploadBtn.style.display = 'block';
+            }
+
+            async processImage() {
+                if (!this.currentImage) return;
+
+                this.loading.style.display = 'block';
+                this.results.style.display = 'none';
+                this.processBtn.disabled = true;
+
+                try {
+                    // OCR Processing
+                    const { data: { text } } = await Tesseract.recognize(
+                        this.currentImage,
+                        'eng',
+                        {
+                            logger: m => console.log(m)
+                        }
+                    );
+
+                    // Extract potential food items
+                    const foodItems = this.extractFoodItems(text);
+                    
+                    if (foodItems.length === 0) {
+                        this.showError('No food items detected. Try a clearer image of a menu.');
+                        return;
+                    }
+
+                    // Get images for each food item
+                    await this.displayResults(foodItems);
+
+                } catch (error) {
+                    this.showError('Error processing image. Please try again.');
+                    console.error('Processing error:', error);
+                } finally {
+                    this.loading.style.display = 'none';
+                    this.processBtn.disabled = false;
+                }
+            }
+
+            extractFoodItems(text) {
+                // Clean and process the OCR text
+                const lines = text.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 2);
+
+                const foodItems = [];
+                const foodKeywords = [
+                    'pizza', 'burger', 'pasta', 'salad', 'soup', 'sandwich', 'chicken', 'beef', 'fish',
+                    'rice', 'noodles', 'curry', 'steak', 'wings', 'tacos', 'sushi', 'ramen', 'bread',
+                    'cake', 'pie', 'ice cream', 'coffee', 'tea', 'juice', 'smoothie'
+                ];
+
+                for (let line of lines) {
+                    // Remove prices and common menu formatting
+                    line = line.replace(/\$\d+\.?\d*/g, '').replace(/\d+\.?\d*/g, '').trim();
+                    
+                    // Skip very short lines or lines with too many special characters
+                    if (line.length < 3 || (line.match(/[^a-zA-Z\s]/g) || []).length > line.length * 0.3) {
+                        continue;
+                    }
+
+                    // Check if line contains food-related keywords or looks like a dish name
+                    const lowerLine = line.toLowerCase();
+                    const hasKeyword = foodKeywords.some(keyword => lowerLine.includes(keyword));
+                    const looksLikeDish = /^[a-zA-Z\s]{3,30}$/.test(line) && line.split(' ').length <= 6;
+
+                    if (hasKeyword || looksLikeDish) {
+                        foodItems.push(line);
+                    }
+                }
+
+                return [...new Set(foodItems)].slice(0, 5); // Remove duplicates and limit to 5 items
+            }
+
+            async displayResults(foodItems) {
+                this.results.innerHTML = '';
+                this.results.style.display = 'block';
+
+                for (const item of foodItems) {
+                    const resultDiv = document.createElement('div');
+                    resultDiv.className = 'dish-result';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="dish-name">${item}</div>
+                        <div class="image-placeholder">Loading image...</div>
+                    `;
+                    
+                    this.results.appendChild(resultDiv);
+
+                    // Simulate getting food image (in real app, you'd use a food image API)
+                    this.getFoodImage(item, resultDiv);
+                }
+            }
+
+            async getFoodImage(dishName, resultDiv) {
+                try {
+                    // In a real application, you would use:
+                    // 1. Google Custom Search API
+                    // 2. Unsplash API for food photos
+                    // 3. Spoonacular API for recipe images
+                    // 4. Or a dedicated food image API
+
+                    // For this demo, we'll use a placeholder service
+                    const imageUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(dishName + ' food')}`;
+                    
+                    const img = new Image();
+                    img.onload = () => {
+                        const placeholder = resultDiv.querySelector('.image-placeholder');
+                        if (placeholder) {
+                            placeholder.outerHTML = `<img src="${imageUrl}" alt="${dishName}" class="dish-image">`;
+                        }
+                    };
+                    img.onerror = () => {
+                        const placeholder = resultDiv.querySelector('.image-placeholder');
+                        if (placeholder) {
+                            placeholder.innerHTML = '🍽️ Image not available';
+                        }
+                    };
+                    img.src = imageUrl;
+
+                } catch (error) {
+                    console.error('Error loading image:', error);
+                    const placeholder = resultDiv.querySelector('.image-placeholder');
+                    if (placeholder) {
+                        placeholder.innerHTML = '🍽️ Image not available';
+                    }
+                }
+            }
+
+            showError(message) {
+                const existingError = document.querySelector('.error');
+                if (existingError) {
+                    existingError.remove();
+                }
+
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error';
+                errorDiv.textContent = message;
+                
+                this.results.parentNode.insertBefore(errorDiv, this.results);
+                
+                setTimeout(() => {
+                    errorDiv.remove();
+                }, 5000);
+            }
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new FoodScannerApp();
+        });
+    </script>
+</body>
+</html>
