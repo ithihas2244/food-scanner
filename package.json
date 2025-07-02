@@ -1,0 +1,42 @@
+{
+  "name": "food-scanner",
+  "version": "1.0.0",
+  "description": "A mobile web app that scans restaurant menus and shows what food items look like using AI-powered OCR and image search",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx serve .",
+    "deploy": "gh-pages -d ."
+  },
+  "keywords": [
+    "food",
+    "menu",
+    "scanner",
+    "ocr",
+    "mobile",
+    "web-app",
+    "restaurant",
+    "ai",
+    "image-recognition"
+  ],
+  "author": "Ithihas <ithihas.cps@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ithihas2244/food-scanner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ithihas2244/food-scanner/issues"
+  },
+  "dependencies": {
+    "tesseract.js": "^4.1.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 1%",
+    "not dead"
+  ]
+}
