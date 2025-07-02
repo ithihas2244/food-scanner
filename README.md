@@ -46,10 +46,6 @@ A mobile web application that scans restaurant menus and shows you what food ite
 3. **View Results**: See detected food items with their corresponding images
 4. **Explore**: Tap on items to see larger images
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - [Tesseract.js](https://tesseract.projectnaptha.com/) for OCR functionality
