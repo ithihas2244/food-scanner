@@ -4,7 +4,7 @@ const app = express();
 const PORT = 3000;
 
 // Get your free API key from https://serpapi.com/
-const SERPAPI_KEY = '62959c25e93c1ee97a702659afefcb40b36fff7480490f956ce2db5be9c8e829';
+const SERPAPI_KEY = process.env.SERPAPI_KEY;
 
 app.get('/api/gemini-food', async (req, res) => {
     const dish = req.query.dish;
