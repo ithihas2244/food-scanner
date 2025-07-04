@@ -12,17 +12,25 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Baloo 2', 'Segoe UI', Arial, sans-serif;
             min-height: 100vh;
-            color: #333;
+            color: #4e2e0e;
+            /* Funky food pattern background with a gradient overlay */
+            background:
+              linear-gradient(135deg, #ffe259 0%, #ffa751 100%),
+              url('https://www.transparenttextures.com/patterns/food.png');
+            background-blend-mode: multiply;
+            background-size: cover, 200px 200px;
+            background-repeat: repeat;
         }
 
         .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(255, 140, 0, 0.15);
+            padding: 30px 20px;
+            margin-top: 40px;
+            margin-bottom: 40px;
         }
 
         .header {
@@ -32,23 +40,23 @@
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.7rem;
+            color: #ff9800;
+            text-shadow: 0 2px 8px #fff3e0, 0 1px 0 #d2691e;
+            letter-spacing: 2px;
         }
 
         .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1.2rem;
+            color: #d2691e;
+            margin-bottom: 10px;
         }
 
         .scanner-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            margin-bottom: 20px;
+            background: linear-gradient(120deg, #fffbe7 60%, #ffe0b2 100%);
+            border-radius: 25px;
+            box-shadow: 0 8px 32px rgba(255, 152, 0, 0.12);
+            border: 2px solid #ff9800;
         }
 
         .camera-container {
@@ -67,49 +75,31 @@
         }
 
         .upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 15px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-        }
-
-        .upload-area:hover {
-            border-color: #764ba2;
-            background: linear-gradient(45deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
-        }
-
-        .upload-area.dragover {
-            border-color: #764ba2;
-            background: linear-gradient(45deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+            border: 3px dashed #ff9800;
+            background: linear-gradient(45deg, #fff3e0 60%, #ffe0b2 100%);
+            color: #d2691e;
         }
 
         .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #667eea;
+            font-size: 3.5rem;
+            color: #ff9800;
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+            color: #fff;
             border: none;
-            padding: 15px 25px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin: 10px 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
+            transition: transform 0.2s cubic-bezier(.68,-0.55,.27,1.55), box-shadow 0.2s;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(90deg, #ffa726 0%, #ffd54f 100%);
+            color: #fff;
+            transform: scale(1.08) rotate(-2deg);
+            box-shadow: 0 8px 24px #ff980055;
         }
 
         .btn:active {
@@ -149,12 +139,20 @@
         }
 
         .dish-result {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            background: #fffbe7;
+            border: 2.5px dashed #ff9800;
+            border-radius: 22px;
+            box-shadow: 0 6px 24px 0 #ff980033;
+            margin-bottom: 22px;
+            padding: 18px 10px 12px 10px;
+            animation: bounceIn 0.7s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(0.95);}
+            100% { transform: scale(1);}
         }
 
         .dish-result:hover {
@@ -163,32 +161,43 @@
         }
 
         .dish-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 15px;
-            text-align: center;
+            color: #d2691e;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-family: 'Baloo 2', cursive, sans-serif;
+            font-family: 'Baloo 2', 'Comic Sans MS', cursive, sans-serif;
+            font-size: 1.7rem;
+            color: #ff7043;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px #fff3e0, 0 1px 0 #d2691e;
         }
 
         .dish-image {
+            display: block;
+            margin: 0 auto 10px auto;
+            max-width: 180px;
+            max-height: 140px;
             width: 100%;
-            height: 200px;
+            height: auto;
+            border-radius: 16px;
+            border: 2.5px solid #ff9800;
+            background: #fff3e0;
+            box-shadow: 0 4px 18px rgba(255, 152, 0, 0.10);
             object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 10px;
+        }
+
+        .dish-desc {
+            color: #6d4c1b;
+            font-size: 1.05rem;
+            text-align: center;
+            margin-bottom: 8px;
+            margin-top: -5px;
+            font-family: 'Baloo 2', cursive, sans-serif;
         }
 
         .image-placeholder {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            background: #fff3e0;
+            color: #bdb76b;
         }
 
         .error {
@@ -214,6 +223,27 @@
             margin: 0 10px;
         }
 
+        /* Food emoji floating animation */
+        .emoji-bg {
+          position: fixed;
+          top: 0; left: 0; width: 100vw; height: 100vh;
+          pointer-events: none;
+          z-index: 0;
+          overflow: hidden;
+        }
+        .emoji {
+          position: absolute;
+          font-size: 2.5rem;
+          opacity: 0.85;
+          animation: float 8s linear infinite;
+          user-select: none;
+          filter: drop-shadow(0 2px 4px #ff9800aa);
+        }
+        @keyframes float {
+          0% { transform: translateY(100vh) scale(1) rotate(0deg);}
+          100% { transform: translateY(-10vh) scale(1.2) rotate(360deg);}
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 15px;
@@ -232,7 +262,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🍽️ Food Scanner</h1>
+            <h1>🍕 Food Scanner 🍔</h1>
             <p>Scan menu items to see how they look!</p>
         </div>
 
@@ -267,6 +297,8 @@
             <div class="results" id="results"></div>
         </div>
     </div>
+
+    <div class="emoji-bg" id="emoji-bg"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
     <script>
@@ -498,30 +530,19 @@
 
             async getFoodImage(dishName, resultDiv) {
                 try {
-                    // In a real application, you would use:
-                    // 1. Google Custom Search API
-                    // 2. Unsplash API for food photos
-                    // 3. Spoonacular API for recipe images
-                    // 4. Or a dedicated food image API
+                    // Call your backend Gemini endpoint
+                    const res = await fetch(`/api/gemini-food?dish=${encodeURIComponent(dishName)}`);
+                    const data = await res.json();
 
-                    // For this demo, we'll use a placeholder service
-                    const imageUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(dishName + ' food')}`;
-                    
-                    const img = new Image();
-                    img.onload = () => {
-                        const placeholder = resultDiv.querySelector('.image-placeholder');
-                        if (placeholder) {
-                            placeholder.outerHTML = `<img src="${imageUrl}" alt="${dishName}" class="dish-image">`;
-                        }
-                    };
-                    img.onerror = () => {
-                        const placeholder = resultDiv.querySelector('.image-placeholder');
-                        if (placeholder) {
-                            placeholder.innerHTML = '🍽️ Image not available';
-                        }
-                    };
-                    img.src = imageUrl;
-
+                    const placeholder = resultDiv.querySelector('.image-placeholder');
+                    if (data.imageUrl) {
+                        placeholder.outerHTML = `
+                            <img src="${data.imageUrl}" alt="${dishName}" class="dish-image">
+                            <div class="dish-desc">${data.description || ''}</div>
+                        `;
+                    } else {
+                        placeholder.innerHTML = '🍽️ Image not available';
+                    }
                 } catch (error) {
                     console.error('Error loading image:', error);
                     const placeholder = resultDiv.querySelector('.image-placeholder');
@@ -553,6 +574,23 @@
         document.addEventListener('DOMContentLoaded', () => {
             new FoodScannerApp();
         });
+
+        const emojis = ["🍕","🍔","🍟","🌮","🍣","🍩","🍦","🍉","🍪","🍿","🍜","🍰","🥑","🍓","🍗","🥞","🍕","🍔","🍟","🍦"];
+        const emojiBg = document.getElementById('emoji-bg');
+        function randomBetween(a, b) { return a + Math.random() * (b - a); }
+        function spawnEmoji() {
+          const emoji = document.createElement('div');
+          emoji.className = 'emoji';
+          emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          emoji.style.left = `${randomBetween(0, 95)}vw`;
+          emoji.style.top = `${randomBetween(80, 100)}vh`;
+          emoji.style.fontSize = `${randomBetween(2, 4)}rem`;
+          emoji.style.animationDuration = `${randomBetween(7, 13)}s`;
+          emojiBg.appendChild(emoji);
+          setTimeout(() => emoji.remove(), 13000);
+        }
+        setInterval(spawnEmoji, 700);
+        for(let i=0;i<10;i++) spawnEmoji();
     </script>
 </body>
 </html>
