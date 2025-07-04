@@ -15,8 +15,6 @@ A mobile web application that scans restaurant menus and shows you what food ite
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **OCR**: Tesseract.js
-- **Image Search**: Unsplash API (demo)
-- **Camera API**: MediaDevices getUserMedia
 - **Responsive Design**: CSS Grid & Flexbox
 
 ## 📧 Contact
